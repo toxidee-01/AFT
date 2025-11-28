@@ -1,0 +1,98 @@
+\section{Built-in Functions}
+% \epigraph{Greeks invented sex, but Italians introduced the concept to women.}{\textit{Ancient Greek Legend}}
+
+\subsection{Basic Mathematical Functions}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Function} & \textbf{Description} \\
+        \hline
+        \mintinline{rust}{abs(x)} & Absolute Value \\
+        \mintinline{rust}{sqrt(x)} & Square Root \\
+        \mintinline{rust}{pow(x, y)} & $x^y$ \\
+        \mintinline{rust}{exp(x)} & Exponential Function \\
+        \mintinline{rust}{ln(x)} & Natural Logarithm \\
+        \mintinline{rust}{log10(x)} & Base-10 Logarithm \\
+        \mintinline{rust}{log2(x)} & Base-2 Logarithm \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Trigonometric Functions}
+AFT offers the following trigonometric functions: \mintinline{text}{sin, cos, tan, sec, cosec, cot, arcsin,} \mintinline{text}{arccos, arctan}.
+
+\subsection{Complex Number Functions}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Function} & \textbf{Description} \\
+        \hline
+        \mintinline{rust}{conj(z)} & Complex Conjugate \\
+        \mintinline{rust}{magnitude(z)} & Magnitude \\
+        \mintinline{rust}{arg(z)} & Argument \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Vector Functions}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Function} & \textbf{Description} \\
+        \hline
+        \mintinline{rust}{len(vec)} & Vector Length \\
+        \mintinline{rust}{sum(vec)} & Sum of Elements \\
+        \mintinline{rust}{mean(vec)} & Arithmetic Mean \\
+        \mintinline{rust}{min(vec)} & Minimum Element \\
+        \mintinline{rust}{max(vec)} & Maximum Element \\
+        \mintinline{rust}{norm(vec)} & L-2 Norm of the Vector \\
+        \hline
+    \end{tabular}
+\end{table}
+Here, \mintinline{text}{vec} must be a vector. \mintinline{text}{sum}, \mintinline{text}{mean} and \mintinline{text}{norm} can only be called on integer, floating-point and complex vectors. \mintinline{text}{min} and \mintinline{text}{max} can only be called on integer and floating-point vectors.
+
+\subsection{Signal Processing Functions}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Function} & \textbf{Description} \\
+        \hline
+        \mintinline{rust}{fft(x)} & Fast Fourier Transform \\
+        \mintinline{rust}{ifft(x)} & Inverse Fast Fourier Transform \\
+        \mintinline{rust}{correlate(x, y)} & Cross-correlation \\
+        \mintinline{rust}{resample(x, fs1, fs2)} & Resampling \\
+        \mintinline{rust}{filter(b, a, x)} & Filter \\
+        \mintinline{rust}{lowpass(...)} & Low-pass Filter \\
+        \mintinline{rust}{highpass(...)} & High-pass Filter \\
+        \mintinline{rust}{bandpass(...)} & Band-pass Filter \\
+        \mintinline{rust}{bandstop(...)} & Band-stop Filter \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Debugging Functions}
+AFT offers a function called \mintinline{text}{dbg} that takes variable number of inputs of any type. \\\\
+\textbf{Example Usage}\begin{minted}{text}
+dbg("x is ", x, "\ny is ", y);
+/* Output
+    x is ...
+    y is ...
+*/
+\end{minted}
+\subsection{File I/O}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Function} & \textbf{Description} \\
+        \hline
+        \mintinline{text}{load(filename)} & Reads values from a file into a vector \\
+        \mintinline{text}{save(filename, x, append)} & Writes values from vector x into a file. The file \\
+        & contents will be overwritten unless append is \mintinline{rust}{true}. \\
+        \hline
+    \end{tabular}
+\end{table}

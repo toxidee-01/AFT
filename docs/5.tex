@@ -1,0 +1,118 @@
+\pagebreak
+\section{Example Code}
+% \epigraph{I'm honored to have one of the most influential sites in modern history named after me.}{\textit{Pornelius Hubert}}
+
+\subsection{Basic Signal Generation}
+
+\begin{minted}{rust}
+fn generate_sine_wave(frequency: f64, sample_rate: f64, duration: f64) [f64] {
+    let num_samples = (duration * sample_rate) as u32;
+    let signal: [f64] = [];
+    
+    for i in 0..num_samples {
+        let t = i as f64 / sample_rate;
+        let sample = sin(2.0 * PI * frequency * t);
+        signal = signal || [sample];  // Concatenate
+    }
+    
+    return signal;
+}
+
+fn main() {
+    let fs = 44100.0;  // Sample rate
+    let freq = 440.0;  // A4 note
+    let duration = 1.0;  // 1 second
+    
+    let sine_wave = generate_sine_wave(freq, fs, duration);
+    dbg(sine_wave);
+}
+\end{minted}
+
+\subsection{Complex Number Operations}
+
+\begin{minted}{rust}
+fn complex_arithmetic_demo() {
+    // Basic complex number operations
+    let z1 = 3.0 + 4.0j;
+    let z2 = 1.0 - 2.0j;
+    let sum = z1 + z2;         // 4.0 + 2.0j
+    let product = z1 * z2;     // 11.0 - 2.0j
+    let conjugate = conj(z1);  // 3.0 - 4.0j
+    
+    dbg(z1, z2, sum, product, conjugate);
+    
+    // Polar form conversion
+    let magnitude = abs(z1);  // 5.0
+    let angle = arg(z1);          // 0.927 radians
+    dbg(magnitude, angle);
+}
+\end{minted}
+\subsection{Arbitrary LTI Filter}
+\begin{minted}{rust}
+fn arbitrary_LTI(h: [f64], x: [f64]) [f64] {
+    return x .* h;
+}
+\end{minted}
+\subsection{Lowpass Butterworth Filter}
+\begin{minted}{rust}
+fn lowpass_butterworth(cutoff: f64, sample_rate: f64, signal: [f64]) [f64] {
+    let omega = 2.0 * PI * cutoff / sample_rate;
+    let cos_omega = cos(omega);
+    let sin_omega = sin(omega);
+    let alpha = sin_omega / (2.0 * 0.707);
+    // Filter coefficients
+    let b0 = (1.0 - cos_omega) / 2.0;
+    let b1 = 1.0 - cos_omega;
+    let b2 = (1.0 - cos_omega) / 2.0;
+    let a0 = 1.0 + alpha;
+    let a1 = -2.0 * cos_omega;
+    let a2 = 1.0 - alpha;
+    // Normalize the coefficients.
+    let b = [b0, b1, b2] / a0;
+    let a = [a0, a1, a2] / a0;
+    // Apply the filter.
+    return filter(b, a, signal);
+}
+\end{minted}
+\subsection{Spectral Analysis}
+\begin{minted}{rust}
+fn spectral_analysis_example() {
+    let fs = 1000.0;  // 1 kHz sampling rate
+    let duration = 2.0;  // 2 seconds
+    let num_samples = (fs * duration) as u32;
+    
+    // Generate test signal: sum of sinusoids
+    let signal: [f64] = [];
+    let t = (0..num_samples) as [f64] / fs;
+    let s = sin(2.0 * PI * 50.0 * t)   // 50 Hz component
+        + 0.5 * sin(2.0 * PI * 120.0 * t)  // 120 Hz component
+        + 0.1 * sin(2.0 * PI * 300.0 * t); // 300 Hz component
+
+    // Compute FFT
+    let spectrum = fft(s);
+    
+    // Calculate magnitude spectrum
+    let magnitude_spectrum = abs(spectrum);
+    
+    // Find peaks in spectrum
+    let peak_indices = find_peaks(magnitude_spectrum, 0.1);
+
+    dbg("Frequency peaks at ");
+    for idx in peak_indices {
+        let frequency = idx as f64 * fs / len(spectrum) as f64;
+        dbg(frequency);
+    }
+}
+
+fn find_peaks(data: [f64], threshold: f64) {
+    let peaks: [u32] = [];
+    
+    for i in 1..(len(data) - 1) {
+        if data[i] > data[i-1] && data[i] > data[i+1] && data[i] > threshold {
+            peaks = peaks || [i as u32];
+        }
+    }
+    
+    return peaks;
+}
+\end{minted}

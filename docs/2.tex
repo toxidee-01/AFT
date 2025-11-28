@@ -1,0 +1,532 @@
+\section{General Syntax and Semantics}
+    % \epigraph{If I had the chance, I would go back to 10 September, 2001 to warn people about Covid-19.}{\textit{Donald J. Trump}}
+\subsection{Primitive Data Types}
+\subsubsection{Integers}
+AFT provides a complete set of integer types with explicit bit-width specifications. \\\\
+\textbf{Unsigned Integers:}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{cccc}
+        \hline
+        \textbf{Type} & \textbf{Size} & \textbf{Minimum Value} & \textbf{Maximum Value} \\
+        \hline
+        \mintinline{rust}{u8} & 8-bit & 0 & 255 \\
+        \mintinline{rust}{u16} & 16-bit & 0 & 65535 \\
+        \mintinline{rust}{u32} & 32-bit & 0 & $2^{32} - 1$ \\
+        \mintinline{rust}{u64} & 64-bit & 0 & $2^{64} - 1$ \\
+        \mintinline{rust}{u128} & 128-bit & 0 & $2^{128} - 1$ \\
+        \hline
+    \end{tabular}
+\end{table}
+\noindent{\textbf{Signed Integers:}}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{cccc}
+        \hline
+        \textbf{Type} & \textbf{Size} & \textbf{Minimum Value} & \textbf{Maximum Value} \\
+        \hline
+        \mintinline{rust}{i8} & 8-bit & -128 & 127 \\
+        \mintinline{rust}{i16} & 16-bit & -32768 & 32767 \\
+        \mintinline{rust}{i32} & 32-bit & $-2^{31}$ & $2^{31} - 1$ \\
+        \mintinline{rust}{i64} & 64-bit & $-2^{63}$ & $2^{63} - 1$ \\
+        \mintinline{rust}{i128} & 128-bit & $-2^{127}$ & $2^{127} - 1$ \\
+        \hline
+    \end{tabular}
+\end{table}
+By default, any integer literals without an explicitly mentioned type will be inferred as \mintinline{rust}{i64}.
+
+\subsubsection{Floating-Point Numbers}
+AFT provides IEEE 754-compliant floating-point types for real number computations, with support for both single and double precision arithmetic.
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ccccc}
+        \hline
+        \textbf{Type} & \textbf{Size} & \textbf{Mantissa} & \textbf{Min. Exp.} & \textbf{Max. Exp.} \\
+        \hline
+        \mintinline{rust}{f32} & 32-bit & 24-bit & -126 & 127 \\
+        \mintinline{rust}{f64} & 64-bit & 53-bit & -1022 & 1023 \\
+        \hline
+    \end{tabular}
+\end{table}
+By default, any floating-point literals without an explicitly mentioned type will be inferred as \mintinline{rust}{f64}.
+
+\subsubsection{Complex Numbers}
+AFT provides native support for complex numbers, essential for signal processing. Complex numbers are represented as pairs of floating-point values for the real and imaginary components.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ccc}
+        \toprule
+        \textbf{Type} & \textbf{Real Part} & \textbf{Imaginary Part} \\
+        \midrule
+        \mintinline{rust}{c32} & \mintinline{rust}{f32} & \mintinline{rust}{f32} \\
+        \mintinline{rust}{c64} & \mintinline{rust}{f64} & \mintinline{rust}{f64} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+By default, complex number literals without explicit typing are inferred as \mintinline{rust}{c64}.
+
+\subsubsection{Boolean}
+AFT provides a standard boolean type for logical operations and control flow.
+
+\textbf{Type:} \mintinline{rust}{bool}
+
+\subsubsection{Strings}
+AFT provides a standard type for strings. Strings accept all valid ASCII characters. No provisions have been made to work with Unicode characters or characters from other character sets.
+\begin{table}[]
+    \centering
+    \begin{tabular}{c|c}
+         &  \\
+         & 
+    \end{tabular}
+    \caption{Caption}
+    \label{tab:placeholder}
+\end{table}
+
+\subsubsection{Vectors}
+AFT provides built-in support for homogeneous collections through vector types, enabling efficient storage and manipulation of sequences of elements.
+
+\textbf{Type:} \mintinline{rust}{[T]} \\
+Vectors can also be initialized using ranges:
+\begin{minted}{rust}
+let x = a..b; // [ a, a + 1, a + 2, ..., b - 1 ]
+let x = a..=b; // [ a, a + 1, a + 2, ..., b ]
+\end{minted}
+\subsection{Keywords}
+AFT reserves the following keywords for language constructs:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{cccc}
+        \toprule
+        \mintinline{rust}{let} & \mintinline{rust}{const} & \mintinline{rust}{fn} & \mintinline{rust}{return} \\
+        \mintinline{rust}{if} & \mintinline{rust}{else} & \mintinline{rust}{while} & \mintinline{rust}{for} \\
+        \mintinline{rust}{repeat} & \mintinline{rust}{struct} & \mintinline{rust}{enum} & \mintinline{rust}{true} \\
+        \mintinline{rust}{false} & \mintinline{rust}{as} & \mintinline{rust}{i8} & \mintinline{rust}{u8} \\
+        \mintinline{rust}{i16} & \mintinline{rust}{u16} & \mintinline{rust}{i32} & \mintinline{rust}{u32} \\
+        \mintinline{rust}{i64} & \mintinline{rust}{u64} & \mintinline{rust}{i128} & \mintinline{rust}{u128} \\
+        \mintinline{rust}{f32} & \mintinline{rust}{f64} & \mintinline{rust}{c32} & \mintinline{rust}{c64} \\
+        \mintinline{rust}{bool} & \mintinline{rust}{str} & \mintinline{rust}{continue} & \mintinline{rust}{break} \\
+        \mintinline{rust}{return} & \mintinline{rust}{static} & \mintinline{text}{PI} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection{Literals}
+\subsubsection{Boolean Literals}
+\begin{itemize}
+    \item \mintinline{rust}{true}
+    \item \mintinline{rust}{false}
+\end{itemize}
+
+\subsubsection{Integer Literals}
+\begin{itemize}
+    \item \textbf{Decimal (default):} \mintinline{rust}{42}, \mintinline{rust}{123}
+    \item \textbf{Binary:} \mintinline{rust}{0b1010}, \mintinline{rust}{0b11110000}
+    \item \textbf{Octal:} \mintinline{rust}{0o755}, \mintinline{rust}{0o644}
+    \item \textbf{Hexadecimal:} \mintinline{rust}{0xFF}, \mintinline{rust}{0xDEADBEEF}
+\end{itemize}
+
+\subsubsection{Float Literals}
+The integer part can be omitted if it is 0. The decimal part can only be omitted if it is zero and an exponent is present.
+\begin{itemize}
+    \item \mintinline{rust}{PI} - 3.14149... , pi is available as float const 
+    \item \mintinline{rust}{.5} - Integer part omitted
+    \item \mintinline{rust}{2.0}
+    \item \mintinline{rust}{0.5}
+    \item \mintinline{rust}{2.5e10} - Scientific notation
+    \item \mintinline{rust}{1e6} - Scientific notation with omitted decimal part
+    \item \mintinline{rust}{.3e-6} - Scientific notation with omitted integer part
+    \item Various ways to write zero: \mintinline{text}{.0, 0.0}
+\end{itemize}
+
+\subsubsection{Complex Literals}
+The imaginary part needs to be explicitly specified for the literal to be inferred as complex.
+\begin{itemize}
+    \item \mintinline{rust}{3.0 + 4.0j} - Real and imaginary parts
+    \item \mintinline{rust}{2.5j} - Pure imaginary number
+    \item \mintinline{rust}{0+0j} - Complex zero
+    \item \mintinline{rust}{6 - 9j} - Negative imaginary part
+    \item \mintinline{rust}{6 - j} -  imaginary part without constant
+\end{itemize}
+
+\subsubsection{Vector Literals}
+Vector literals include comma-separated elements enclosed in square brackets.
+\begin{itemize}
+    \item \mintinline{rust}{[1, 2, 3]} - Integer vector
+    \item \mintinline{rust}{[1.0, 2.0, 3.0]} - Float vector
+    \item \mintinline{rust}{[1, 2j, -3, -4j]} - Complex vector
+\end{itemize}
+
+\subsection{String Literals}
+String literals must be enclosed in double quotes \mintinline{rust}{"}. AFT supports the following escape sequences in string literals:
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{cc}
+        Escape Sequence & Character Represented \\
+        \hline
+        \textbackslash n & Line Feed (LF) \\
+        \textbackslash r & Carriage Return (CR) \\
+        \textbackslash t & Horizontal Tab \\
+        \textbackslash v & Vertical Tab \\
+        \textbackslash\textbackslash & Bacslash \\
+        \textbackslash" & Double Quotation Mark \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{minted}{rust}
+// This is a sample "string".
+let s = "This is a sample \"string\".";
+\end{minted}
+
+\subsection{Identifiers}
+Identifiers in AFT are case-sensitive and must follow these rules:
+\begin{itemize}
+    \item Must start with an alphabetic character or underscore
+    \item Can contain alphanumeric characters and underscores
+    \item Cannot be a reserved keyword
+\end{itemize}
+
+Valid identifiers: \mintinline{rust}{variable_name}, \mintinline{rust}{_private}, \mintinline{rust}{camelCase}, \mintinline{rust}{CONSTANT_VALUE}
+
+\subsection{Operators}
+\subsubsection{Unary Operators}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{cc}
+        \toprule
+        \textbf{Operator} & \textbf{Description} \\
+        \midrule
+        \mintinline{rust}{+} & positive \\
+        \mintinline{rust}{-} & negative \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+\subsubsection{Arithmetic Operators}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{cc}
+        \toprule
+        \textbf{Operator} & \textbf{Description} \\
+        \midrule
+        \mintinline{rust}{+} & Addition \\
+        \mintinline{rust}{-} & Subtraction \\
+        \mintinline{rust}{*} & Multiplication \\
+        \mintinline{rust}{/} & Division \\
+        \mintinline{rust}{%} & Modulo \\
+        \mintinline{rust}{**} & Exponentiation \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsubsection{Comparison Operators}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{cc}
+        \toprule
+        \textbf{Operator} & \textbf{Description} \\
+        \midrule
+        \mintinline{rust}{==} & Equal to \\
+        \mintinline{rust}{!=} & Not equal to \\
+        \mintinline{rust}{<} & Less than \\
+        \mintinline{rust}{>} & Greater than \\
+        \mintinline{rust}{<=} & Less than or equal to \\
+        \mintinline{rust}{>=} & Greater than or equal to \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsubsection{Logical Operators}
+All the logical operators are short-circuit operators. They can only be applied to values of type \mintinline{rust}{bool}.
+\begin{table}[H]
+    \centering
+    \begin{tabular}{cc}
+        \toprule
+        \textbf{Operator} & \textbf{Description} \\
+        \midrule
+        \mintinline{rust}{&&} & Logical AND \\
+        \mintinline{rust}{||} & Logical OR \\
+        \mintinline{rust}{^} & Logical XOR \\
+        \mintinline{rust}{!} & Logical NOT \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsubsection{Bitwise Operators}
+AFT offers standard bitwise operators that can be applied to any integer type. Both operands of binary bitwise operators must be of the same type.
+\begin{table}[H]
+    \centering
+    \begin{tabular}{cc}
+        \toprule
+        \textbf{Operator} & \textbf{Description} \\
+        \midrule
+        \mintinline{rust}{&} & Bitwise AND \\
+        \mintinline{rust}{|} & Bitwise OR \\
+        \mintinline{rust}{^} & Bitwise XOR \\
+        \mintinline{rust}{<<} & Bitwise left shift \\
+        \mintinline{rust}{>>} & Bitwise right shift \\
+        \mintinline{rust}{!} & Bitwise NOT \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsubsection{String Operators}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{cc}
+        \hline
+        \textbf{Operator} & \textbf{Description} \\
+        \hline
+        \mintinline{text}{+} & Concatenation \\
+        \mintinline{text}{[]} & Subscripting \\
+        \hline
+    \end{tabular}
+\end{table}
+\textbf{Note:} Strings are 0-indexed.
+
+\subsubsection{Vector Operators}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{cc}
+        \toprule
+        \textbf{Operator} & \textbf{Description} \\
+        \midrule
+        \mintinline{text}{||} & Concatenation \\
+        \mintinline{text}{.*} & Convolution \\
+        \mintinline{text}{+} & Vector Addition (or Unary) \\
+        \mintinline{text}{-} & Vector Subtraction (or Unary) \\
+        \mintinline{text}{*} & Scalar Multiplication \\
+        \mintinline{text}{/} & Scalar Division \\
+        \mintinline{text}{[]} & Subscripting \\
+        \mintinline{text}{~} & Reversing the order of elements \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+\textbf{Note:} Vectors are 0-indexed.
+
+\subsubsection{Type Casting with \texttt{as}}
+
+In AFT, explicit type casting is done using the \mintinline{text}{as} keyword .
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{cc}
+        \toprule
+        \textbf{Expression} & \textbf{Description} \\
+        \midrule
+        \mintinline{rust}{x as i32} & Casts \mintinline{text}{x} to integer \\
+        \mintinline{rust}{y as f32} & Casts \mintinline{text}{y} to floating-point \\
+        \mintinline{rust}{z as c64} & Casts \mintinline{text}{z} to complex number \\
+        \mintinline{rust}{v as [c64]} & Converts vector \mintinline{text}{v} into a vector of \mintinline{rust}{c64} type \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\noindent
+Example usage:
+\begin{minted}{rust}
+a = 3.7
+b = a as i32     # b becomes 3
+c = b as f32   # c becomes 3.0
+\end{minted}
+
+
+\subsubsection{Operator Precedence}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        Operators & Associativity \\
+        \hline
+        Function Calls & \\
+        Vector and String Subscripting & left-to-right \\
+        Struct Member Access (.) & \\
+        \hline
+        Unary Operators (\mintinline{text}{+}, \mintinline{text}{-}, \mintinline{text}{~}) & \\
+        Bitwise NOT & right-to-left \\
+        Logical NOT & \\
+        \hline
+        Type Casting & left-to-right \\
+        \hline
+        \mintinline{text}{**} & right-to-left \\
+        \hline
+        \mintinline{text}{*, /, %, .*} & left-to-right \\
+        \hline
+        \mintinline{text}{+, -} & left-to-right \\
+        \hline
+        \mintinline{text}{<<, >>} & left-to-right \\
+        \hline
+        \mintinline{text}{&} & left-to-right \\
+        \hline
+        \mintinline{text}{^} & left-to-right \\
+        \hline
+        \mintinline{text}{|} & left-to-right \\
+        \hline
+        Comparison Operators & - \\
+        \hline
+        \mintinline{text}{&&} & left-to-right \\
+        \hline
+        Logical OR & left-to-right \\
+        \hline
+        Vector Concatenation & left-to-right \\
+        \hline
+        \mintinline{text}{=} & right-to-left \\
+        \hline
+        \mintinline{rust}{,} & left-to-right \\
+        \hline
+        \mintinline{rust}{return} & - \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Variable Declaration}
+AFT supports type inference and explicit type annotations for variable declarations:
+\begin{minted}[breaklines]{rust}
+let a = 123;                      // i32 (inferred)
+let b: u8 = 255;                  // explicit u8 type
+let c: [c32] = [1, 2j, -3, -4j];  // complex array
+let d: [c32] = [1, 2j, -3, -4j];  // same as above
+let e = [1, 2j, -3, -4j];         // type inferred as [c64]
+let f = 6 - 9j;                   // type inferred as c64
+
+let complex_64_array = []; // ERROR: Type cannot be inferred
+
+// Correct approach:
+let complex_64_array: [c64] = [];
+
+let x = 3.0;
+x = 2; // ERROR: Assigning integer to float
+
+let x = 3.0;
+let x = 2; // WARNING: Variable x is shadowed
+
+let a = 0+0j;  // Complex zero (c64)
+let a = 0.;    // Float zero (f64)
+let a = 0;     // Integer zero (i32)
+
+let a = 1, b = 2.0, c = 4 + j ;
+\end{minted}
+Multiple variables can be declared in a single statement:
+\begin{minted}{rust}
+let (a,b,c) = (1,2.0,4+j) ;
+let (a,b,a) = (1,2.0,4+j) ;         // ERROR : Attempt to shadow variable in same statement
+\end{minted}
+Parentheses are allowed on the left-hand side of variable declarations and assignment operators only if there are two or more comma-separated identifiers present.
+Constants can be defined using the \mintinline{rust}{const} keyword. The type must be explicitly mentioned for constants.
+\begin{minted}{rust}
+// Definition of PI (a built-in constant)
+const PI: f64 = 3.14159265358979323846264338327950288;
+const TAU: f64 = 2. * PI;
+const (PI_2, PI_4): (f64, f64) = (PI / 2., PI / 4.);
+\end{minted}
+The right-hand side of a constant definition must only have literals and other constant variables. Only \mintinline{rust}{const} variables can be global variables.
+
+\subsection{Control Flows}
+
+\subsubsection{Conditional Statements}
+\begin{minted}{rust}
+if condition {
+    // do something
+}
+
+if condition {
+    // do something
+} else {
+
+    // do something else
+}
+
+if condition1 {
+    // do something
+} else if condition2 {
+    // otherwise do something
+} else {
+    // do something else
+}
+\end{minted}
+
+\subsubsection{Loops}
+\textbf{Repeat Loop}
+\begin{minted}{rust}
+repeat number_of_iterations {
+    // do something
+}
+\end{minted}
+\mintinline{text}{number_of_iterations} must be an unsigned integer. \\
+\phantom{.} \\
+\textbf{While Loop}
+\begin{minted}{rust}
+while condition {
+    // do something
+}
+\end{minted}
+\phantom{.} \\
+\textbf{For Loop}
+\begin{minted}{rust}
+for element in collection {
+    // do something
+}
+\end{minted}
+
+\subsection{Functions}
+Functions in AFT are defined as below:
+\begin{minted}{rust}
+    fn function_name(parameter_list) return_type_list {
+        // do something
+    }
+\end{minted}
+Calling functions is straightforward:
+\begin{minted}{rust}
+    function_name(param1, param2); // Example function call for function with 2 arguments
+    let x = function_with_1_return(...);
+    let (x, y) = function_with_2_return(...);
+\end{minted}
+Functions can return multiple values. Returned values must be enclosed in parentheses and separated by commas.
+\begin{minted}{rust}
+    fn sum_and_product(a: i32, b: i32) (i32, i32) {
+        return (a + b, a * b);
+    }
+    let (x, y) = sum_and_product(3, 2);
+\end{minted}
+When assigning a function's returned values to variables, the number of variables must be equal to the number of returned values.
+\begin{minted}{rust}
+    (x, y) = sum_and_product(3, 2); // OK
+    x = sum_and_product(3, 2); // ERROR: 
+\end{minted}
+
+\subsection{Structs}
+AFT supports user-defined structs with members laid out in memory in the same order they are declared. These structs also support nesting.
+\begin{minted}{rust}
+// A simple struct with three 32-bit integers as members
+struct Point3 {
+    x: i32,
+    y: i32,
+    z: i32
+}
+\end{minted}
+Structs can be initialized as follows:
+\begin{minted}{rust}
+// Create a Point3 instance with x = 1, y = 2 and z = 3.
+let point_1 = Point3 { x: 1, y: 2, z: 3 };
+\end{minted}
+Struct members can be accessed using the \mintinline{rust}{.} operator.
+\begin{minted}{rust}
+let x_coordinate_of_point_1 = point_1.x;
+\end{minted}
+
+\subsection{Comments}
+AFT supports both single-line and multi-line comments:
+
+\begin{minted}{rust}
+// This is a single line comment
+
+/* 
+This is a
+multi-line
+comment.
+*/
+\end{minted}
+Single-line comments begin with \mintinline{rust}{//} and continue to the end of the line. Multi-line comments are enclosed between \mintinline{rust}{/*} and \mintinline{rust}{*/} and can span multiple lines.
